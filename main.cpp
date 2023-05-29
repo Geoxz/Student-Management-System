@@ -63,11 +63,11 @@ void printList(node* head)
  
  void getSpecificNode(node* head){
     node* ptr = head;
-    int count = 0, n;
+    int count = 0, index;
     cout<<"\nNumero de nodo a buscar: ";
-    cin>>n;
+    cin>>index;
     while(ptr != NULL){
-        if (count == n){
+        if (count == index){
             cout<<ptr->id;
         }
         count++;
@@ -77,11 +77,11 @@ void printList(node* head)
 
  void modifyNode(node* head){
     node* ptr = head;
-    int count = 0, n;
+    int count = 0, index;
     cout<<"\nNumero de nodo a modificar: ";
-    cin>>n;
+    cin>>index;
     while(ptr != NULL){
-        if (count == n){
+        if (count == index){
             cout<<"Ingrese id\n";
             cin>>ptr->id;
             cout<<"\nIngrese nombre\n";
