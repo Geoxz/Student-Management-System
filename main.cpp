@@ -20,30 +20,35 @@ void add(node *&), printList(node*), getSpecificNode(node*), modifyNode(node*);
 
 int main(){
     node *ptr = NULL;
-    int opt = 0;
-    cout<<"1 add\n2print\n3 get\n4modify\n";
+    int opt;
+    
     while (true){
+        system("cls");
+        opt = 0;
+        cout<<"1 add\n2 print\n3 get\n4 modify\n";
+        cin>>opt;
         switch (opt){
         case 1:
+            system("cls");
             add(ptr);
             break;
         case 2:
+            system("cls");
             printList(ptr);
             break;
         case 3:
+            system("cls");
             getSpecificNode(ptr);
             break;
         case 4:
+            system("cls");
             modifyNode(ptr);
             break;
-        default:
-            return 0;
-            break;
         }
-        system("pause>nul"); 
-        return 0;
     }
-}
+    system("pause>nul"); 
+    return 0;
+    }
 
 void add(node *&head){
     node *new_node = new node();
@@ -56,7 +61,7 @@ void add(node *&head){
     cin>>new_node->aspirant.age;
     new_node -> next = head;
     head = new_node;
-    system("cls");
+    return;
 }
 
 void printList(node* head)
@@ -73,6 +78,7 @@ void printList(node* head)
         count++;
     }
     cout << "nullptr";
+    system("pause>nul"); 
 }
  
  void getSpecificNode(node* head){
@@ -87,6 +93,7 @@ void printList(node* head)
         count++;
         ptr = ptr->next;
     }
+    system("pause>nul"); 
  }
 
  void modifyNode(node* head){
