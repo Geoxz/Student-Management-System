@@ -16,15 +16,16 @@ struct node{
     node *next;
 };
 
-void add(node *&), printList(node*), getCurrentNode(node*);
+void add(node *&), printList(node*), getSpecificNode(node*);
 
 int main(){
     node *ptr = NULL;
     for (size_t i = 0; i < 3; i++)
     {
-    add(ptr);
+        add(ptr);
     }
     printList(ptr);
+    getSpecificNode(ptr);
     system("pause>nul");
 }
 
@@ -56,7 +57,7 @@ void printList(node* head)
     cout << "nullptr";
 }
  
- void getCurrentNode(node* head){
+ void getSpecificNode(node* head){
     node* ptr = head;
     int count = 0, n;
     cin>>n;
