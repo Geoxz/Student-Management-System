@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -15,7 +16,7 @@ struct node{
     node *next;
 };
 
-void add(node *&), printList(node*);;
+void add(node *&), printList(node*), getCurrentNode(node*);
 
 int main(){
     node *ptr = NULL;
@@ -27,9 +28,8 @@ int main(){
     system("pause>nul");
 }
 
-void add(node *&ptr){
+void add(node *&head){
     node *new_node = new node();
-    int aId, aAge;
     string aName;
     cout<<"Ingrese id\n";
     cin>>new_node->id;
@@ -38,8 +38,8 @@ void add(node *&ptr){
     getline(cin, new_node->aspirant.name);
     cout<<"\nIngrese edad\n";
     cin>>new_node->aspirant.age;
-    new_node -> next = ptr;
-    ptr = new_node;
+    new_node -> next = head;
+    head = new_node;
     system("cls");
 }
 
@@ -56,3 +56,15 @@ void printList(node* head)
     cout << "nullptr";
 }
  
+ void getCurrentNode(node* head){
+    node* ptr = head;
+    int count = 0, n;
+    cin>>n;
+    while(ptr != NULL){
+        if (count == n){
+            cout<<ptr->id;
+        }
+        count++;
+        ptr = ptr->next;
+    }
+ }
