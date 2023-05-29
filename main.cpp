@@ -20,15 +20,29 @@ void add(node *&), printList(node*), getSpecificNode(node*), modifyNode(node*);
 
 int main(){
     node *ptr = NULL;
-    for (size_t i = 0; i < 3; i++)
-    {
-        add(ptr);
+    int opt = 0;
+    cout<<"1 add\n2print\n3 get\n4modify\n";
+    while (true){
+        switch (opt){
+        case 1:
+            add(ptr);
+            break;
+        case 2:
+            printList(ptr);
+            break;
+        case 3:
+            getSpecificNode(ptr);
+            break;
+        case 4:
+            modifyNode(ptr);
+            break;
+        default:
+            return 0;
+            break;
+        }
+        system("pause>nul"); 
+        return 0;
     }
-    printList(ptr);
-    getSpecificNode(ptr);
-    modifyNode(ptr);
-    printList(ptr);
-    system("pause>nul");
 }
 
 void add(node *&head){
