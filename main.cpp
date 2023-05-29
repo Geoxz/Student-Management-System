@@ -16,7 +16,7 @@ struct node{
     node *next;
 };
 
-void add(node *&), printList(node*), getSpecificNode(node*);
+void add(node *&), printList(node*), getSpecificNode(node*), modifyNode(node*);
 
 int main(){
     node *ptr = NULL;
@@ -26,12 +26,13 @@ int main(){
     }
     printList(ptr);
     getSpecificNode(ptr);
+    modifyNode(ptr);
+    printList(ptr);
     system("pause>nul");
 }
 
 void add(node *&head){
     node *new_node = new node();
-    string aName;
     cout<<"Ingrese id\n";
     cin>>new_node->id;
     cout<<"\nIngrese nombre\n";
@@ -47,12 +48,15 @@ void add(node *&head){
 void printList(node* head)
 {
     node* ptr = head;
+    int count=0;
     while (ptr)
     {
+        cout<<"Numero de nodo: "<<count<<endl;
         cout <<"Id: "<<ptr->id <<"\n";
         cout <<"Nombre: "<<ptr->aspirant.name << "\n";
         cout <<"Edad: "<<ptr->aspirant.age << "\n\n";
         ptr = ptr->next;
+        count++;
     }
     cout << "nullptr";
 }
@@ -60,10 +64,31 @@ void printList(node* head)
  void getSpecificNode(node* head){
     node* ptr = head;
     int count = 0, n;
+    cout<<"\nNumero de nodo a buscar: ";
     cin>>n;
     while(ptr != NULL){
         if (count == n){
             cout<<ptr->id;
+        }
+        count++;
+        ptr = ptr->next;
+    }
+ }
+
+ void modifyNode(node* head){
+    node* ptr = head;
+    int count = 0, n;
+    cout<<"\nNumero de nodo a modificar: ";
+    cin>>n;
+    while(ptr != NULL){
+        if (count == n){
+            cout<<"Ingrese id\n";
+            cin>>ptr->id;
+            cout<<"\nIngrese nombre\n";
+            cin.ignore(); 
+            getline(cin, ptr->aspirant.name);
+            cout<<"\nIngrese edad\n";
+            cin>>ptr->aspirant.age;
         }
         count++;
         ptr = ptr->next;
