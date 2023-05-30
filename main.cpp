@@ -22,7 +22,7 @@ void createNode(node*&);
 void add(node*);
 void printList(node*);
 void printNode(node*, int);
-void searchNode(node*);
+void searchNode(node*, bool);
 void modifyNode(node*);
 void saveToCSV(node*);
 void loadFromCSV(node*&);
@@ -52,11 +52,11 @@ int main() {
                 break;
             case 3:
                 system("cls");
-                searchNode(ptr);
+                searchNode(ptr, 0);
                 break;
             case 4:
                 system("cls");
-                modifyNode(ptr);
+                searchNode(ptr, 1);
                 saveToCSV(ptr); // Guardar datos en el archivo CSV
                 break;
         }
@@ -75,27 +75,27 @@ void createNode(node*& head) {
 
 void add(node* head) {
     node* ptr = head;
-    cout << "Ingrese id\n";
+    cout << "Ingrese id: ";
     cin >> ptr->id; // This will be randomized later
-    cout << "\nIngrese nombre\n";
+    cout << "\nIngrese nombre: ";
     cin.ignore();
     getline(cin, ptr->aspirant.name);
     transform(ptr->aspirant.name.begin(), ptr->aspirant.name.end(), ptr->aspirant.name.begin(), ::toupper);
-    cout << "\nIngrese apellido\n";
+    cout << "\nIngrese apellido: ";
     getline(cin, ptr->aspirant.lastName);
     transform(ptr->aspirant.lastName.begin(), ptr->aspirant.lastName.end(), ptr->aspirant.lastName.begin(), ::toupper);
-    cout << "\nIngrese carrera\n";
+    cout << "\nIngrese carrera: ";
     getline(cin, ptr->aspirant.career);
     transform(ptr->aspirant.career.begin(), ptr->aspirant.career.end(), ptr->aspirant.career.begin(), ::toupper);
-    cout << "\nIngrese email\n";
+    cout << "\nIngrese email: ";
     getline(cin, ptr->aspirant.email);
-    cout << "\nIngrese edad\n";
+    cout << "\nIngrese edad: ";
     cin >> ptr->aspirant.age;
-    cout << "\nIngrese Semestre\n";
+    cout << "\nIngrese Semestre: ";
     cin >> ptr->aspirant.course;
     cout << "\nIngrese Numero de telefono\n";
     cin >> ptr->aspirant.phoneNo;
-    cout << "\nIngrese cedula\n";
+    cout << "\nIngrese cedula: ";
     cin >> ptr->aspirant.dni;
 }
 
@@ -125,61 +125,161 @@ void printNode(node* head, int count) {
     cout << "Estado: " << (ptr->aspirant.status ? "Inactivo" : "Activo") << "\n\n";
 }
 
-void searchNode(node* head) {
+void searchNode(node* head, bool mod) {
     node* ptr = head;
-    int count = 0, index = 0;
-    string name, lastName, dni, id;
-    bool found = false;
-    cout << "\t\tBusqueda\n\n0.-ID\n1.- Nombre y Apellido\n2.-Documento de Identidad\n";
-    cin >> index;
+    int count = 0, index = 0, sType = 0;
+    string name, lastName, dni, id, career;
+    int course, age;
+    bool found = false, status;
+
+    cout<<"\t\tBusqueda\n\n";
+
+    if (!mod){
+        while (sType > 2 || sType < 1){
+            cout<<"Que tipo de busqueda realizara\n1.- Especifica\n2.- General\n";
+            cin >> sType;
+        }
+    } else {
+        sType = 1;
+    }
+
+
+    if (sType == 1){
+            while (index > 3 || index < 1){
+                cout<<"\nIngresa el filtro\n1.- ID\n2.- Nombre\n3.- Documento de identidad\n";
+                cin>>index;
+            }    
+        } else {
+            while (index > 4 || index < 1){
+                cout<<"\nIngresa el filtro\n1.- Estado\n2.- Edad\n3.- Carrera\n4.- Carrera y Semestre\n";
+                cin>>index;
+            } 
+        }
+
     while (ptr != NULL) {
-        switch (index) {
-            case 0:
-                cout << "Ingrese el documento de identidad: ";
-                cin >> id;
-                while (ptr != NULL) {
-                    if (id == ptr->id) {
-                        printNode(ptr, count);
-                        found = true;
-                    }
-                    count++;
-                    ptr = ptr->next;
-                }
-                break;
+        if (sType == 1){
+            switch (index) {
 
-            case 1:
-                cout << "\nIngrese nombre\n";
-                cin.ignore();
-                getline(cin, name);
-                transform(name.begin(), name.end(), name.begin(), ::toupper);
-                cout << "\nIngrese apellido\n";
-                getline(cin, lastName);
-                transform(lastName.begin(), lastName.end(), lastName.begin(), ::toupper);
-                while (ptr != NULL) {
-                    if (name == ptr->aspirant.name && lastName == ptr->aspirant.lastName) {
-                        printNode(ptr, count);
-                        found = true;
+                case 1:
+                    cout << "Ingrese el ID: ";
+                    cin >> id;
+                    while (ptr != NULL) {
+                        if (id == ptr->id) {
+                            printNode(ptr, count);
+                            found = true;
+                            if (mod){
+                                add(ptr);
+                            }
+                        }
+                        count++;
+                        ptr = ptr->next;
                     }
-                    count++;
-                    ptr = ptr->next;
-                }
-                break;
+                    break;
 
-            case 2:
-                cout << "Ingrese el documento de identidad: ";
-                cin >> dni;
-                while (ptr != NULL) {
-                    if (dni == ptr->aspirant.dni) {
-                        printNode(ptr, count);
-                        found = true;
+                case 2:
+                    cout << "\nIngrese nombre\n";
+                    cin.ignore();
+                    getline(cin, name);
+                    transform(name.begin(), name.end(), name.begin(), ::toupper);
+                    cout << "\nIngrese apellido\n";
+                    getline(cin, lastName);
+                    transform(lastName.begin(), lastName.end(), lastName.begin(), ::toupper);
+                    while (ptr != NULL) {
+                        if (name == ptr->aspirant.name && lastName == ptr->aspirant.lastName) {
+                            printNode(ptr, count);
+                            found = true;
+                            if (mod){
+                                add(ptr);
+                            }
+                        }
+                        count++;
+                        ptr = ptr->next;
                     }
-                    count++;
-                    ptr = ptr->next;
-                }
-                break;
+                    break;
 
-            default:
-                break;
+                case 3:
+                    cout << "Ingrese el documento de identidad: ";
+                    cin >> dni;
+                    while (ptr != NULL) {
+                        if (dni == ptr->aspirant.dni) {
+                            printNode(ptr, count);
+                            found = true;
+                            if (mod){
+                                add(ptr);
+                            }
+                        }
+                        count++;
+                        ptr = ptr->next;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        } else {
+            switch (index) {
+
+                case 1:
+                    cout << "Ingrese el Estado: (0 = activo, 1 = inactivo)\n";
+                    cin >> status;
+                    while (ptr != NULL) {
+                        if (status == ptr->aspirant.status) {
+                            printNode(ptr, count);
+                            found = true;
+                        }
+                        count++;
+                        ptr = ptr->next;
+                    }
+                    break;
+
+                case 2:
+                    cout << "\nIngrese la edad\n";
+                    cin>>age;
+                    while (ptr != NULL) {
+                        if (age == ptr->aspirant.age) {
+                            printNode(ptr, count);
+                            found = true;
+                        }
+                        count++;
+                        ptr = ptr->next;
+                    }
+                    break;
+
+                case 3:
+                    cout << "Ingrese el nombre de la carrera: ";
+                    cin.ignore();
+                    getline(cin, career);
+                    transform(career.begin(), career.end(), career.begin(), ::toupper);
+                    while (ptr != NULL) {
+                        if (career == ptr->aspirant.career) {
+                            printNode(ptr, count);
+                            found = true;
+                        }
+                        count++;
+                        ptr = ptr->next;
+                    }
+                    break;
+
+                case 4:
+                    cout << "Ingrese el nombre de la carrera: ";
+                    cin.ignore();
+                    getline(cin, career);
+                    transform(career.begin(), career.end(), career.begin(), ::toupper);
+                    cout << "Ingrese el numero del semestre: ";
+                    cin>>course;
+                    while (ptr != NULL) {
+                        if (career == ptr->aspirant.career & course == ptr->aspirant.course) {
+                            printNode(ptr, count);
+                            found = true;
+                        }
+                        count++;
+                        ptr = ptr->next;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
         }
     }
 
