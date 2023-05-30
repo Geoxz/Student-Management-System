@@ -3,6 +3,7 @@
 #include <fstream>
 #include <algorithm>
 #include <sstream>
+#include <cstdlib>
 
 using namespace std;
 
@@ -25,6 +26,7 @@ void printNode(node*, int);
 void searchNode(node*, bool);
 void saveToCSV(node*);
 void loadFromCSV(node*&);
+string ID(node*);
 
 const string FILENAME = "data.csv"; // Nombre del archivo CSV
 
@@ -74,8 +76,9 @@ void createNode(node*& head) {
 
 void add(node* head) {
     node* ptr = head;
-    cout << "Ingrese id: ";
-    cin >> ptr->id; // This will be randomized later
+    cout << "id: ";
+    ptr->id = ID(ptr);
+    cout<<ptr->id;
     cout << "\nIngrese nombre: ";
     cin.ignore();
     getline(cin, ptr->aspirant.name);
@@ -96,6 +99,24 @@ void add(node* head) {
     cin >> ptr->aspirant.phoneNo;
     cout << "\nIngrese cedula: ";
     cin >> ptr->aspirant.dni;
+}
+
+string ID(node* head){
+    node* ptr = head;
+    string id;
+    int num;
+
+    if (!ptr->id.empty()){
+        return ptr->id;
+    }
+
+    srand((unsigned) time(NULL));
+
+    for (int i = 0; i < 4; i++){
+        num = 1 + (rand() % 9);
+        id += to_string(num);
+    }
+    return id;
 }
 
 void printList(node* head) {
