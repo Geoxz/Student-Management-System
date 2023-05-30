@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <algorithm>
+
 using namespace std;
 
 struct student{
@@ -11,12 +12,12 @@ struct student{
 };
 
 struct node{
-    int id;
+    string id;
     struct student aspirant;
     node *next;
 };
 
-void createNode(node *&), add(node*), printList(node*), getSpecificNode(node*), modifyNode(node*);
+void createNode(node *&), add(node*), printList(node*), printNode(node*, int), searchNode(node*), modifyNode(node*);
 
 int main(){
     node *ptr = NULL;
@@ -38,7 +39,7 @@ int main(){
             break;
         case 3:
             system("cls");
-            getSpecificNode(ptr);
+            searchNode(ptr);
             break;
         case 4:
             system("cls");
@@ -85,41 +86,108 @@ void add(node* head){
     cin>>ptr->aspirant.phoneNo;
     cout<<"\nIngrese cedula\n";
     cin>>ptr->aspirant.dni;
-    cout<<endl;
 }
 
-void printList(node* head)
-{
+void printList(node* head){
     node* ptr = head;
     int count=0;
-    while (ptr)
-    {
-        cout<<"Numero de nodo: "<<count<<endl;
-        cout<<"Id: "<<ptr->id <<"\n";
-        cout<<"Nombre: "<<ptr->aspirant.name<<" "<<ptr->aspirant.lastName<<"\n";
-        cout<<"Documento De Identidad: "<<ptr->aspirant.dni<<"\n";
-        cout<<"Edad: "<<ptr->aspirant.age << "\n";
-        cout<<"Carrera: "<<ptr->aspirant.career<<"\n";
-        cout<<"Email: "<<ptr->aspirant.email<<"\n";
-        cout<<"Numero de Telefono: "<<ptr->aspirant.phoneNo<<"\n";
+    while (ptr){
+        printNode(ptr, count);
         ptr = ptr->next;
         count++;
     }
+
     cout << "nullptr";
     system("pause>nul"); 
 }
  
- void getSpecificNode(node* head){
+void printNode(node* head, int count){
     node* ptr = head;
-    int count = 0, index;
-    cout<<"\nNumero de nodo a buscar: ";
+    cout<<"Numero de nodo: "<<count<<endl;
+    cout<<"Id: "<<ptr->id <<"\n";
+    cout<<"Nombre: "<<ptr->aspirant.name<<" "<<ptr->aspirant.lastName<<"\n";
+    cout<<"Documento De Identidad: "<<ptr->aspirant.dni<<"\n";
+    cout<<"Edad: "<<ptr->aspirant.age << "\n";
+    cout<<"Carrera: "<<ptr->aspirant.career<<"\n";
+    cout<<"Email: "<<ptr->aspirant.email<<"\n";
+    cout<<"Numero de Telefono: "<<ptr->aspirant.phoneNo<<"\n";
+    cout<<"Estado: ";
+
+    if (ptr->aspirant.status == 0){
+        cout<<"Activo\n\n";
+    } else{
+        cout<<"Inactivo\n\n";
+    }
+}
+
+
+
+ void searchNode(node* head){
+    node* ptr = head;
+    int count = 0, index = 0;
+    string name, lastName, dni, id;
+    bool found = 1;
+    cout<<"\t\tBusqueda\n\n0.-ID\n1.- Nombre y Apellido\n2.-Documento de Identidad\n";
     cin>>index;
     while(ptr != NULL){
-        if (count == index){
-            cout<<ptr->id;
+        switch (index){
+        case 0:
+            cout<<"Ingrese el documento de identidad: ";
+            cin>>id;
+            while(ptr != NULL){
+                if (id == ptr->id){
+                    printNode(ptr, count);
+                    found = 0;
+                }
+                count++;
+                ptr = ptr->next;
+            }
+            if (found == 1){
+                cout<<"\nEstudiante no registrado\n";
+            }
+            break;
+        
+        case 1:
+            cout<<"\nIngrese nombre\n";
+            cin.ignore(); 
+            getline(cin, name);
+            transform(name.begin(), name.end(), name.begin(), ::toupper);
+            cout<<"\nIngrese apellido\n";
+            getline(cin, lastName);
+            transform(lastName.begin(), lastName.end(), lastName.begin(), ::toupper);
+            while(ptr != NULL){
+                if (name == ptr->aspirant.name & lastName == ptr->aspirant.lastName){
+                    printNode(ptr, count);
+                    found = 0;
+                }
+                count++;
+                ptr = ptr->next;
+            }
+            if (found == 1){
+                cout<<"\nEstudiante no registrado\n";
+            }
+            break;
+
+        case 2:
+            cout<<"Ingrese el documento de identidad: ";
+            cin>>dni;
+            while(ptr != NULL){
+                if (dni == ptr->aspirant.dni){
+                    printNode(ptr, count);
+                    found = 0;
+                }
+                count++;
+                ptr = ptr->next;
+            }
+            if (found == 1){
+                cout<<"\nEstudiante no registrado\n";
+            }
+            break;
+
+        default:
+            break;
         }
-        count++;
-        ptr = ptr->next;
+        
     }
     system("pause>nul"); 
  }
