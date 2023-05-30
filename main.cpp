@@ -23,7 +23,6 @@ void add(node*);
 void printList(node*);
 void printNode(node*, int);
 void searchNode(node*, bool);
-void modifyNode(node*);
 void saveToCSV(node*);
 void loadFromCSV(node*&);
 
@@ -288,20 +287,6 @@ void searchNode(node* head, bool mod) {
     }
 
     system("pause>nul");
-}
-
-void modifyNode(node* head) {
-    node* ptr = head;
-    int count = 0, index;
-    cout << "\nNumero de nodo a modificar: ";
-    cin >> index;
-    while (ptr != NULL) {
-        if (count == index) {
-            add(ptr);
-        }
-        count++;
-        ptr = ptr->next;
-    }
 }
 
 #define FILENAME "data.csv"
