@@ -1,9 +1,10 @@
 #include <iostream>
+#include <windows.h>
 #include <string>
 #include <fstream>
 #include <algorithm>
 #include <sstream>
-#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
@@ -28,7 +29,18 @@ void saveToCSV(node*);
 void loadFromCSV(node*&);
 void showData(node*);
 void showPage();
+void showDataHeader();
+void showPrintData(node*, int);
 string generateID(node*);
+
+HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+COORD CursorPosition;
+
+void gotoXY(int x, int y){
+	CursorPosition.X = x; 
+	CursorPosition.Y = y; 
+	SetConsoleCursorPosition(hConsole,CursorPosition);
+}
 
 const string FILENAME = "data.csv"; // Nombre del archivo CSV
 
@@ -62,6 +74,13 @@ int main() {
                 system("cls");
                 searchNode(ptr, 1);
                 saveToCSV(ptr); // Guardar datos en el archivo CSV
+                break;
+                case 5:
+                system("cls");
+                showData(ptr);
+                break;
+            default:
+                cout<<"Opcion no valida, intentalo nuevamente\n";
                 break;
         }
     }
@@ -159,7 +178,7 @@ void printNode(node* head, int count) {
 
 void searchNode(node* head, bool mod) {
     node* ptr = head;
-    int count = 0, index, sType;
+    int count = 1, index, sType, n;
     string name, lastName, dni, id, career;
     int course, age;
     bool found = false, status;
@@ -174,7 +193,6 @@ void searchNode(node* head, bool mod) {
     } else {
         sType = 1;
     }
-
 
     if (sType == 1){
             while (index > 3 || index < 1){
@@ -200,7 +218,13 @@ void searchNode(node* head, bool mod) {
                             printNode(ptr, count);
                             found = true;
                             if (mod){
-                                add(ptr);
+                                cout<<"\nDesea Modificarlo\n";
+                                cin>>n;
+                                if (n == 1){
+                                    add(ptr);
+                                } else{
+                                    return;
+                                }
                             }
                         }
                         count++;
@@ -221,7 +245,13 @@ void searchNode(node* head, bool mod) {
                             printNode(ptr, count);
                             found = true;
                             if (mod){
-                                add(ptr);
+                                cout<<"\nDesea Modificarlo\n";
+                                cin>>n;
+                                if (n == 1){
+                                    add(ptr);
+                                } else{
+                                    return;
+                                }
                             }
                         }
                         count++;
@@ -237,7 +267,13 @@ void searchNode(node* head, bool mod) {
                             printNode(ptr, count);
                             found = true;
                             if (mod){
-                                add(ptr);
+                                cout<<"\nDesea Modificarlo\n";
+                                cin>>n;
+                                if (n == 1){
+                                    add(ptr);
+                                } else{
+                                    return;
+                                }
                             }
                         }
                         count++;
@@ -256,10 +292,15 @@ void searchNode(node* head, bool mod) {
 
                     while (ptr != NULL) {
                         if (age == ptr->aspirant.age) {
-                            printNode(ptr, count);
+                            if (!found){
+                                system("cls");
+                            }
+                            showDataHeader();
+                            showPrintData(ptr, count);
+                            count++;
+                            // printNode(ptr, count);
                             found = true;
                         }
-                        count++;
                         ptr = ptr->next;
                     }
                     break;
@@ -272,10 +313,15 @@ void searchNode(node* head, bool mod) {
 
                     while (ptr != NULL) {
                         if (career == ptr->aspirant.career) {
-                            printNode(ptr, count);
+                            if (!found){
+                                system("cls");
+                            }
+                            showDataHeader();
+                            showPrintData(ptr, count);
+                            count++;
+                            // printNode(ptr, count);
                             found = true;
                         }
-                        count++;
                         ptr = ptr->next;
                     }
                     break;
@@ -290,16 +336,22 @@ void searchNode(node* head, bool mod) {
                     cin>>course;
 
                     while (ptr != NULL) {
-                        if (career == ptr->aspirant.career & course == ptr->aspirant.course) {
-                            printNode(ptr, count);
+                        if (career == ptr->aspirant.career & course == ptr->aspirant.course){
+                            if (!found){
+                                system("cls");
+                            }
+                            showDataHeader();
+                            showPrintData(ptr, count);
+                            count++;
+                            // printNode(ptr, count);
                             found = true;
                         }
-                        count++;
                         ptr = ptr->next;
                     }
                     break;
 
                 default:
+                    cout<<"Opcion no valida, intente otra vez\n";
                     break;
             }
         }
@@ -369,17 +421,44 @@ void loadFromCSV(node*& head) {
 }
 
 void showData(node* head) {
+    system("cls");
     node* ptr = head;
-    cout << "ID\t\tNombre\t\tCarrera\t\tSemestre\t\tEstado" << endl;
+    int line = 0;
+    showDataHeader();
     while (ptr != NULL) {
-        cout << ptr->id << "\t\t"
-             << ptr->aspirant.name << "\t\t"
-             << ptr->aspirant.career << "\t\t"
-             << ptr->aspirant.course << "\t\t"
-             << (ptr->aspirant.status ? "Inactivo" : "Activo") << endl;
+        line++;
+        showPrintData(ptr, line);
         ptr = ptr->next;
     }
-        system("pause");        
+    cout<<endl;
+    system("pause");        
+}
+
+void showDataHeader(){
+    gotoXY(0,0);
+    cout<<"ID";
+    gotoXY(7,0);
+    cout<<"Nombre";
+    gotoXY(30,0);
+    cout<<"Carrera";
+    gotoXY(55,0);
+    cout<<"Semestre";
+    gotoXY(70,0);
+    cout<<"Estado";
+}
+
+void showPrintData(node* ptr, int line){
+    gotoXY(0,line);
+    cout<<ptr->id;
+    gotoXY(7,line);
+    cout<<ptr->aspirant.name;
+    gotoXY(30,line);
+    cout<<ptr->aspirant.career;
+    gotoXY(55,line);
+    cout<<ptr->aspirant.course;
+    gotoXY(70,line);
+    cout<<(ptr->aspirant.status ? "Inactivo" : "Activo");
+    cout<<endl;
 }
 
 void showPage() {
